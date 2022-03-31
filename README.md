@@ -10,7 +10,7 @@ This repo contains the codes, images, report and slides for the project of the c
   - Rishabh
 
 ## Project Title
-  `A nonparametric Bayesian ensemble approach to variable selection`
+  `A Review of the Portkey Algorithm with Applications`
 
 ## Abstract
   > In this project,...
@@ -19,4 +19,4 @@ This repo contains the codes, images, report and slides for the project of the c
 
 ## Primary Reference
 
-  [1] Bleich, J., Kapelner, A., George, E. I., & Jensen, S. T. (2014). Variable selection for BART: an application to gene regulation. The Annals of Applied Statistics, 8(3), 1750-1781.
+  [1] Vats, D., Gonçalves, F. B., Łatuszyński, K., & Roberts, G. O. (2021). Efficient Bernoulli factory Markov chain Monte Carlo for intractable posteriors. Biometrika.
