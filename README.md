@@ -4,7 +4,7 @@ This repo contains the codes, images, report and slides for the project of the c
 
 ## Project Members
   - Arkajyoti Bhattacharjee
-  - Divyanshi
+  - Devyanshi Singh
   - Dhruvil Sangani
   - Nitin Garg
   - Rishabh
