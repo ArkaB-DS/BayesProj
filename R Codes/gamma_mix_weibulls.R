@@ -90,7 +90,7 @@ stable_99 <- mcmc(N = 1e5, start = true.mean, beta = .99,  k = k, a1 = a1, b1 = 
 stable_90 <- mcmc(N = 1e5, start = true.mean, beta = .90,  k = k, a1 = a1, b1 = b1, h = true.var)
 stable_75 <- mcmc(N = 1e5, start = true.mean, beta = .75,  k = k, a1 = a1, b1 = b1, h = true.var)
 
-save(bark, stable_99, stable_90, stable_75, file = "weibull_one_run")
+save(bark, stable_99, stable_90, stable_75, file = "./Data/weibull_one_run")
 
 
 ############### ESS and multiple reps ############
@@ -131,7 +131,7 @@ for(b in 1:B)
   
   print(b)
   
-  save(time, ess, max.l, mean.l, file = "wei_sim")
+  save(time, ess, max.l, mean.l, file = "./Data/wei_sim")
 }
 
 ## Reproducing Tables and Plots
