@@ -1,79 +1,73 @@
 # Example 1: Gamma Mixture of Weibulls
 
-## Load necessary libraries
 library(mcmcse)
 library(ellipse)
 library(coda)
 
-## setting seed to ensure reproducibility
 set.seed(100)
 
-cbound <- function(x, k) k/(exp(1)*x) ## as described in the paper
-
-b2coin <- function(x.curr, x.prop, k, beta, a1, b1)
+barker2coin <- function(y, x, k, beta, a1, b1, c.x, c.y)
 {
-  foo <- 0
-  
-  c.prop <- cbound(x = x.prop, k = k)
-  c.curr <- cbound(x = x.curr, k = k)
-  loops <- 0
-  
-  while(foo == 0)
+  itr <- 0
+  while(TRUE)
   {
-    loops <- loops+1
-    S <- rbinom(1, 1, prob = beta)
+    itr <- itr+1
+    S <- rbinom(1, 1, beta)
     if(S == 0)
     {
-      return(c(x.curr, loops))
-    } else {
-      
-      C1 <- rbinom(1, 1, c.prop/(c.curr + c.prop))
+      return(c(x, itr))
+    } 
+    else
+    {
+      C1 <- rbinom(1, 1, c.y/(c.x + c.y))
       if(C1 == 1)
       {
-        lam1 <- rgamma(1, shape = a1, rate = b1)
-        p1 <- dweibull(x.prop, shape = k, scale = lam1)/c.prop
+        lambda <- rgamma(1, a1, b1)
+        p.y <- dweibull(y, k, lambda)/c.y
         
-        C2 <- rbinom(1, 1, p1)
+        C2 <- rbinom(1, 1, p.y)
+        if(C2 == 1)return(c(y, itr))
+      } 
+      else 
+      {
+        lambda <- rgamma(1, a1, b1)
+        p.x <- dweibull(x, k, lambda)/c.x
+        
+        C2 <- rbinom(1, 1, p.x)
         if(C2 == 1)
         {
-          return(c(x.prop, loops))
-        } 
-      } else {
-        lam1 <- rgamma(1, shape = a1, rate = b1)
-        p2 <- dweibull(x.curr, shape = k, scale = lam1)/c.curr
-        
-        C2 <- rbinom(1, 1, p2)
-        if(C2 == 1)
-        {
-          return(c(x.curr, loops))
+          return(c(x, itr))
         }
       }
     }
   }
 }
 
+
 mcmc <- function(N = 1e3, beta = .95, start, h = 4, k = 5, a1 = 2, b1 = 5)
 {
-  out <- numeric(length = N)
+  samp <- numeric(length = N)
   loops <- numeric(length = N)
-  out[1] <- start
-  acc <- 0
+  samp[1] <- start
+  accept <- 0
   for(i in 2:N)
   {
-    prop <- rnorm(1, out[i-1], sd = sqrt(h))
+    prop <- rnorm(1, samp[i-1], sd = sqrt(h))
 
     if(prop < 0) 
     {
-      out[i] <- out[i-1]
+      samp[i] <- samp[i-1]
       next
     }
+    c.y <- k/(exp(1)*prop)
+    c.x <- k/(exp(1)*samp[i-1])
     
-    interim <- b2coin(x.curr = out[i-1], x.prop = prop, k = k, beta = beta, a1 = a1, b1 = b1)
-    out[i] <-  interim[1]
-    if(out[i] != out[i-1]) acc <- acc+1
-    loops[i] <- interim[2]
+    re.iter <- barker2coin(x = samp[i-1], y = prop, k = k, beta = beta, a1 = a1, b1 = b1, c.x, c.y)
+    samp[i] <-  re.iter[1]
+    if(samp[i] != samp[i-1]) accept <- accept+1
+    loops[i] <- re.iter[2]
   }
-  return(list("mcmc" = out, "loops" = loops, "accept" = acc/N))
+  return(list("mcmc" = samp, "loops" = loops, "accept" = accept/N))
 }
 
 
@@ -83,7 +77,7 @@ k <- 10
 
 true.mean <- (a1/b1 * gamma(1 + 1/k)) 
 foo <- gamma(1 + 2/k) - (gamma(1 + 1/k))^2
-true.var <-  ( (gamma(1 + 1/k))^2* a1/b1^2 + foo*(a1/b1^2 + a1^2/b1^2)) 
+true.var <-  ((gamma(1 + 1/k))^2* a1/b1^2 + foo*(a1/b1^2 + a1^2/b1^2)) 
 
 bark <- mcmc(N = 1e5, start = true.mean, beta = 1,  k = k, a1 = a1, b1 = b1, h = true.var)
 stable_99 <- mcmc(N = 1e5, start = true.mean, beta = .99,  k = k, a1 = a1, b1 = b1, h = true.var)
