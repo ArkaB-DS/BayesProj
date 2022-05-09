@@ -10,7 +10,7 @@ This repo contains the codes, images, report and slides for the project of the c
   - Rishabh Gupta
 
 ## Project Title
-  `Bernoulli factory based Portkey and Flipped Portkey MCMC Algorithms: Theory and Examples` [`Project Slides`](https://github.com/ArkaB-DS/BayesProj/blob/main/Bayesian_Project_Slides.pdf)
+  `Bernoulli factory based Portkey and Flipped Portkey MCMC Algorithms: Theory and Examples` [`Project Slides`](https://github.com/ArkaB-DS/BayesProj/blob/main/Bayesian_Project_Slides.pdf) [`Report`](https://github.com/ArkaB-DS/BayesProj/blob/main/Bayesian_Project.pdf)
 
 ## Abstract
   > In this report, we present two stable Bernoulli factories that generate events within those class of acceptance probabilities which do not involve the ratio of intractable target (posterior) distribution evaluated at two points. The efficiency of the methods rely on obtaining a reasonable lower and upper bound on the target density and we present examples were such bounds are viable. The report is primarily based on [1].
